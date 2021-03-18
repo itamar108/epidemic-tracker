@@ -4,6 +4,9 @@ from datetime import date, timedelta
 import requests
 import json
 
+COUNTRIES_DATA_PATH = "CountriesData"
+
+SUBSCRIBERS_DATA_PATH = "Subscribers"
 
 JSON_DATE_END_IDX = 10 # index of last date char in a json date&time string
 
@@ -29,7 +32,7 @@ class CasesCache:
         :param end: end date
         :return: list of stats per period from cache
         """
-        file_path = self.dirname + country + ".json"
+        file_path = f"{self.dirname}/{country}.json"
         if os.path.isfile(file_path):
             found_in_cache = self.lookup_period_in_cache(start,end, file_path)
             if found_in_cache:
@@ -70,6 +73,7 @@ class CasesCache:
         response = requests.get(COUNTRY_STATS_URL + country, params={
             'from': (start - timedelta(1)).isoformat(),
             'to': end.isoformat()}).json()
+        # dropping stats regrading non-mainland territories (see README)
         mainland_stats = [x for x in response if x['Province'] == ""]
         for i in range(1, len(mainland_stats)):
             new_key = mainland_stats[i]["Date"][:JSON_DATE_END_IDX]
@@ -86,7 +90,7 @@ class CasesCache:
         :param stats: stats to write
         :return: None
         """
-        file_path = f"{self.dirname}{country}.json"
+        file_path = f"{self.dirname}/{country}.json"
         if not os.path.exists(file_path):
             with open(file_path, "w") as f:
                 json.dump(stats, f)
@@ -100,8 +104,7 @@ class CasesCache:
             json.dump(new_data, f)
 
 
-cases = CasesCache("CountriesData/")
-
+cases = CasesCache(COUNTRIES_DATA_PATH)
 
 
 def estimated_risk_per_day(active_cases, active_cases_yesterday,
@@ -144,7 +147,6 @@ def get_visit_risk(visit):
     :param visit: tuple describing visit
     :return: visit's risk
     """
-    print(visit)
     country = visit[0].lower()
     arrival = date.fromisoformat(visit[1])
     left_date = arrival + timedelta(visit[2])
@@ -161,5 +163,26 @@ def get_trip_risk(visits):
     for visit in visits:
         trip_risk+=get_visit_risk(visit)
     return trip_risk
+
+
+def add_new_subscriber(subscriber):
+    """
+    Creates a new subscriber file (out of subscriber data) in suitable
+    country directory (which is created in one dosen't exists)
+    :param subscriber: subscriber data
+    :return: None
+    """
+    country = subscriber["country"]
+    email, date = subscriber["email"], subscriber["dateOfRoute"]
+    newfile_name = f"{date}_{email}"
+    country_dir_path = f"{SUBSCRIBERS_DATA_PATH}/{country}"
+    if not os.path.exists(country_dir_path):
+        try:
+            os.makedirs(country_dir_path)
+        except:
+            raise (f"Could not create sub-directory for {country}")
+    file_path = f"{country_dir_path}/{newfile_name}"
+    with open(file_path, "w") as f:
+        json.dump(subscriber,f)
 
 

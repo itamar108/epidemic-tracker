@@ -5,3 +5,14 @@
     # print(cases.fetch_stats_from_server("italy",a,b))
 
     # print(get_country_risk("italy", a, b))
+
+
+
+m = {
+ "route": [{"lat": 23.54545, "long": 24.44234},
+ {"lat": 23.54545, "long": 24.44234},
+ {"lat": 23.54545, "long": 24.44234}],
+ "dateOfRoute": "2021-01-14",
+ "country": "IL",
+ "email": 'subscriber1@notexist.com'
+}
