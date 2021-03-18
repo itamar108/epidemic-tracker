@@ -1,10 +1,11 @@
 import flask
+import multiprocessing
 from flask import jsonify
 from risk_analyzer import get_trip_risk
-from notificator import add_new_subscriber
+from notificator import add_new_subscriber, poll_and_notify
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+# app.config["DEBUG"] = True
 
 
 @app.route('/', methods=['GET'])
@@ -28,5 +29,12 @@ def api_subscribe():
     add_new_subscriber(flask.request.json)
     return ""    # Should returned string be explicitly '200 OK'?
 
+
+def start_api_server():
+    app.run(debug=True, use_reloader=False)
+
 if __name__ == '__main__':
-    app.run()
+    p1 = multiprocessing.Process(name="p1",target= poll_and_notify)
+    p2 = multiprocessing.Process(name="p2", target=start_api_server)
+    p1.start()
+    p2.start()

@@ -148,19 +148,16 @@ class Notificator:
             json.dump(self.notification_data, notification_file)
 
 
-    def poll_and_notify(self):
-        """
-        This function runs consistently, polling server and notifies infected
-        subscribers.
-        :return: None
-        """
-
-        while True:
-            start_time = time.time()
-            self.fetch_and_check_infection()
-            time.sleep(120 - ((time.time()- start_time)%120))
-            # sleep 120 seconds total (including execution of command before)
-
-if __name__ == '__main__':
+def poll_and_notify():
+    """
+    This function runs consistently, polling server and notifies infected
+    subscribers.
+    :return: None
+    """
+    print("yes")
     n = Notificator()
-    n.poll_and_notify()
+    while True:
+        start_time = time.time()
+        n.fetch_and_check_infection()
+        time.sleep(120 - ((time.time()- start_time)%120))
+        # sleep 120 seconds total (including execution of command before)

@@ -17,7 +17,7 @@ consider only the mainland data (where province attribute is "").
 
 
 2.
-    A short explanation regrading the subscribers data saved (tasks 4+5):
+    regrading tasks 4+5:
 I chose to implement and handle the subscribers data in the following
 manner:
 

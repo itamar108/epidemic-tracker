@@ -6,7 +6,6 @@ import json
 
 COUNTRIES_DATA_DIR_PATH = "CountriesData"
 
-
 JSON_DATE_END_IDX = 10 # index of last date char in a json date&time string
 
 COUNTRY_STATS_URL = "https://api.covid19api.com/country/"
