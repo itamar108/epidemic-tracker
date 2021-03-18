@@ -4,9 +4,9 @@ from datetime import date, timedelta
 import requests
 import json
 
-COUNTRIES_DATA_PATH = "CountriesData"
+COUNTRIES_DATA_DIR_PATH = "CountriesData"
 
-SUBSCRIBERS_DATA_PATH = "Subscribers"
+SUBSCRIBERS_DATA_DIR_PATH = "Subscribers"
 
 JSON_DATE_END_IDX = 10 # index of last date char in a json date&time string
 
@@ -104,7 +104,7 @@ class CasesCache:
             json.dump(new_data, f)
 
 
-cases = CasesCache(COUNTRIES_DATA_PATH)
+cases = CasesCache(COUNTRIES_DATA_DIR_PATH)
 
 
 def estimated_risk_per_day(active_cases, active_cases_yesterday,
@@ -175,14 +175,12 @@ def add_new_subscriber(subscriber):
     country = subscriber["country"]
     email, date = subscriber["email"], subscriber["dateOfRoute"]
     newfile_name = f"{date}_{email}"
-    country_dir_path = f"{SUBSCRIBERS_DATA_PATH}/{country}"
+    country_dir_path = f"{SUBSCRIBERS_DATA_DIR_PATH}/{country}"
     if not os.path.exists(country_dir_path):
         try:
             os.makedirs(country_dir_path)
         except:
             raise (f"Could not create sub-directory for {country}")
-    file_path = f"{country_dir_path}/{newfile_name}"
+    file_path = f"{country_dir_path}/{newfile_name}.txt"
     with open(file_path, "w") as f:
         json.dump(subscriber,f)
-
-
