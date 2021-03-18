@@ -25,7 +25,7 @@ def api_infectionRisk():
 @app.route('/epidemic-tracker/covid19/subscribe/route', methods=['PUT'])
 def api_subscribe():
     add_new_subscriber(flask.request.json)
-    return ""    # Should returned string be explicitly '200 OK'
+    return ""    # Should returned string be explicitly '200 OK'?
 
 if __name__ == '__main__':
     app.run()
