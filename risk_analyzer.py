@@ -67,7 +67,7 @@ class CasesCache:
             json.dump(new_data, f)
 
 
-# TODO: Use a proper file name
+
 cases = CasesCache("CountriesData/")
 
 
@@ -85,42 +85,44 @@ def estimated_risk_per_day(active_cases, active_cases_yesterday,
     day_new_cases = active_cases - active_cases_yesterday
     print(day_new_cases, "yyo")
     sick_population_ratio = (active_cases / confirmed_cases) * 100
-    estimated = ((
-                     day_new_cases / active_cases) * 100) * sick_population_ratio * 0.5
+    estimated = ((day_new_cases / active_cases) * 100) * sick_population_ratio * 0.5
 
     return estimated
 
 
 def get_country_risk(country, start, end):
-    """Cache or request."""
-    total_risk = 0
+    """
+    return country's summation of risks per priod
+    :param country: country name
+    :param start: start date (datetime obj)
+    :param end: end date (datetime obj)
+    :return: country risk per period
+    """
+    r = 0
     period_cases = cases.get_country_cases(country, start, end)
     for daily_record in period_cases:
         today, yesterday, confirmed = daily_record
-        r = estimated_risk_per_day(today, yesterday, confirmed)
-        print(r)
-        total_risk += 1 / (end - start).days + 1
-    # TODO: How to aggregate daily risks?
-    return total_risk
+        r += estimated_risk_per_day(today, yesterday, confirmed)
+    return r
 
 
 def get_visit_risk(visit):
     country = visit[0].lower()
     arrival = date.fromisoformat(visit[1])
     left_date = arrival + timedelta(visit[2])
-    country_cases = get_country_risk(country, arrival, left_date)
+    return get_country_risk(country, arrival, left_date)
 
 
 def get_trip_risk(visits):
+    trip_risk = 0
     for visit in visits:
-        visit_risk = get_visit_risk(visit)
-    # TODO: How to aggregate daily risks?
-    return visit_risk
+        trip_risk+=get_visit_risk(visit)
+    return trip_risk
 
 
-if __name__ == '__main__':
-    a = date.fromisoformat("2021-03-08")
-    b = date.fromisoformat("2021-03-09")
+# if __name__ == '__main__':
+    # a = date.fromisoformat("2020-03-08")
+    # b = date.fromisoformat("2020-03-09")
     # print(cases.fetch_cases_from_server("italy",a,b))
 
-    print(get_country_risk("italy", a, b))
+    # print(get_country_risk("italy", a, b))
