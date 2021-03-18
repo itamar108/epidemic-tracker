@@ -1,0 +1,7 @@
+
+# if __name__ == '__main__':
+    # a = date.fromisoformat("2020-03-08")
+    # b = date.fromisoformat("2020-03-09")
+    # print(cases.fetch_cases_from_server("italy",a,b))
+
+    # print(get_country_risk("italy", a, b))

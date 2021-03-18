@@ -6,31 +6,31 @@ import json
 
 COUNTRY_STATS_URL = "https://api.covid19api.com/country/"
 
+
+
 class CasesCache:
     def __init__(self, dirname):
-
         self.dirname = dirname
-        # Read file
 
     def get_country_cases(self, country, start, end):
-        period_cases = []
         file_path = self.dirname + country + ".json"
         if os.path.isfile(file_path):
-            found_in_cache = self.lookup_period_in_cache(end, file_path,
-                                                         period_cases, start)
+            found_in_cache = self.lookup_period_in_cache(start,end, file_path)
             if found_in_cache:
                 return found_in_cache
 
         self.fetch_cases_from_server(country, start, end)
-        return self.lookup_period_in_cache(end, file_path, period_cases, start)
+        return self.lookup_period_in_cache(start,end,file_path)
 
-    def lookup_period_in_cache(self, end, file_path, period_cases, start):
+    def lookup_period_in_cache(self, start, end, file_path):
+        period_cases = []
         with open(file_path, "r") as f:
             country_stats = json.load(f)
             cur = start
             while cur <= end and cur.isoformat() in country_stats:
                 period_cases.append(country_stats[cur.isoformat()])
                 cur = cur + timedelta(1)
+
         if len(period_cases) - 1 == (end - start).days:
             return period_cases
         return None
@@ -51,7 +51,6 @@ class CasesCache:
 
     def persist(self, country, cases):
         """save the cache state.
-
         """
         file_path = f"{self.dirname}{country}.json"
         if not os.path.exists(file_path):
@@ -67,8 +66,8 @@ class CasesCache:
             json.dump(new_data, f)
 
 
-
 cases = CasesCache("CountriesData/")
+
 
 
 def estimated_risk_per_day(active_cases, active_cases_yesterday,
@@ -83,7 +82,6 @@ def estimated_risk_per_day(active_cases, active_cases_yesterday,
     """
 
     day_new_cases = active_cases - active_cases_yesterday
-    print(day_new_cases, "yyo")
     sick_population_ratio = (active_cases / confirmed_cases) * 100
     estimated = ((day_new_cases / active_cases) * 100) * sick_population_ratio * 0.5
 
@@ -119,10 +117,3 @@ def get_trip_risk(visits):
         trip_risk+=get_visit_risk(visit)
     return trip_risk
 
-
-# if __name__ == '__main__':
-    # a = date.fromisoformat("2020-03-08")
-    # b = date.fromisoformat("2020-03-09")
-    # print(cases.fetch_cases_from_server("italy",a,b))
-
-    # print(get_country_risk("italy", a, b))
