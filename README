@@ -32,8 +32,8 @@ A.  I chose to implement and handle the subscribers data in the following
 
 
 B.  Although I assume using files is a not a great idea and prone to race
-    condition issues, since i used a default single-threaded flask, which will
-     process one request at a time, it won't create writer race conditions
-     over subscribers' countries files.
+    condition issues, i figured that since i use a default single-threaded
+    flask, which will process one request at a time, i won't create writer race
+    conditions over subscribers' countries files.
 
 
