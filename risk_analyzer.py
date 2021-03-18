@@ -6,7 +6,6 @@ import json
 
 COUNTRIES_DATA_DIR_PATH = "CountriesData"
 
-SUBSCRIBERS_DATA_DIR_PATH = "Subscribers"
 
 JSON_DATE_END_IDX = 10 # index of last date char in a json date&time string
 
@@ -165,38 +164,3 @@ def get_trip_risk(visits):
     return trip_risk
 
 
-def update_data_with_subscriber(data, date, email, subscriber):
-    if date in data:
-        if email in data[date]:
-            data[date][email].append(subscriber)
-        else:
-            print(data)
-            data[date][email] = [subscriber]
-    else:
-        data[date] = {email: [subscriber]}
-
-
-def add_new_subscriber(subscriber):
-    """
-        Adds a new subcriber to subscriber data (will be added to it's
-        country's file, if one exists, otherwise will be created)
-        :param subscriber: subscriber data
-        :return: None
-        """
-    country = subscriber["country"]
-    date = subscriber["dateOfRoute"]
-    email = subscriber["email"]
-    country_filepath = f"{SUBSCRIBERS_DATA_DIR_PATH}/{country}.json"
-
-    if not os.path.exists(country_filepath):
-        user_pair = {email: [subscriber]}
-        with open(country_filepath, "w") as f:
-            json.dump({date:user_pair}, f)
-    else:
-        with open(country_filepath, "r") as f:
-            data = json.load(f)
-
-        update_data_with_subscriber(data, date, email, subscriber)
-
-        with open(country_filepath,"w") as f:
-            json.dump(data,f)

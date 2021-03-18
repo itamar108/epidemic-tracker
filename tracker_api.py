@@ -1,6 +1,7 @@
 import flask
 from flask import jsonify
-from risk_analyzer import get_trip_risk, add_new_subscriber
+from risk_analyzer import get_trip_risk
+from notificator import add_new_subscriber
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
