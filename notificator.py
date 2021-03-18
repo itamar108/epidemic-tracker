@@ -157,6 +157,7 @@ def poll_and_notify():
     n = Notificator()
     while True:
         start_time = time.time()
+        print(start_time)
         n.fetch_and_check_infection()
         time.sleep(120 - ((time.time()- start_time)%120))
         # sleep 120 seconds total (including execution of command before)

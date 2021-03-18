@@ -14,9 +14,9 @@ COUNTRY_STATS_URL = "https://api.covid19api.com/country/"
 
 class CasesCache:
     """Class representing our cache for countries infection data per date,
-    as needed in task 3. Will be buily by a folder ('countriesData') that
+    as needed in task 3. Represented by folder ('countriesData') that
     will contain a .json file for each country (where each key is a date,
-    and values of the form (days_active_amount, day_before_active_amount,
+    and each value is of the form (days_active_amount, day_before_active_amount,
     days_confirmed_amount)"""
 
     def __init__(self, dirname):
