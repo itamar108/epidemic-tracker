@@ -1,8 +1,8 @@
 import flask
 import requests
 
-from risk_estimation import get_trip_risk
-from risk_estimation import get_visit_risk
+from risk_analyzer import get_trip_risk
+from risk_analyzer import get_visit_risk
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
