@@ -165,7 +165,7 @@ def get_trip_risk(visits):
     return trip_risk
 
 
-def add_new_subscriber(subscriber):
+def add_new_subscriber2(subscriber):
     """
     Creates a new subscriber file (out of subscriber data) in suitable
     country directory (which is created in one dosen't exists)
@@ -181,6 +181,58 @@ def add_new_subscriber(subscriber):
             os.makedirs(country_dir_path)
         except:
             raise (f"Could not create sub-directory for {country}")
-    file_path = f"{country_dir_path}/{newfile_name}.txt"
+    file_path = f"{country_dir_path}/{newfile_name}.json"
+
     with open(file_path, "w") as f:
         json.dump(subscriber,f)
+
+
+def add_new_subscriber(subscriber):
+    country = subscriber["country"]
+    date = subscriber["dateOfRoute"]
+    subscribers_filepath = f"{SUBSCRIBERS_DATA_DIR_PATH}/subscribers.json"
+    key = f"{date}_{country}"
+
+
+    if not os.path.exists(subscribers_filepath):
+        pair = {key:[subscriber]}
+        with open(subscribers_filepath, "w") as f:
+            json.dump(pair, f)
+            return
+
+    with open(subscribers_filepath, "r") as f:
+        data = json.load(f)
+
+    if key in data:
+        data[key].append(subscriber)
+    else:
+        data[key] = [subscriber]
+
+    with open(subscribers_filepath,"w") as f:
+        json.dump(data,f)
+
+
+def add_new_subscriber3(subscriber):
+    country = subscriber["country"]
+    date = subscriber["dateOfRoute"]
+    subscribers_filepath = f"{SUBSCRIBERS_DATA_DIR_PATH}/subscribers.json"
+    key = f"{date}_{country}"
+
+
+    if not os.path.exists(subscribers_filepath):
+        pair = {key:[subscriber]}
+        with open(subscribers_filepath, "w") as f:
+            json.dump(pair, f)
+            return
+
+    with open(subscribers_filepath, "r") as f:
+        data = json.load(f)
+
+    if key in data:
+        data[key].append(subscriber)
+    else:
+        data[key] = [subscriber]
+
+    with open(subscribers_filepath,"w") as f:
+        json.dump(data,f)
+
