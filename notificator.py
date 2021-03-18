@@ -154,7 +154,6 @@ def poll_and_notify():
     subscribers.
     :return: None
     """
-    print("yes")
     n = Notificator()
     while True:
         start_time = time.time()

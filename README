@@ -1,38 +1,39 @@
 
 
+1.              A note regarding task 3:
+
+    some countries, like the netherlands (that appeared in the assignment
+    example), have multiple covid19 records per day.
+    for instance,
+    https://api.covid19api.com/country/Netherlands?from=2021-01-07T00%3A00%3A00&to
+    =2021-01-08T00%3A00%3A00,
+    will include a records for the netherlands mainland but also several records
+    for each dutch territories.
+    when considering active & confirmed cases of country per day, i chose to
+    consider only the mainland data (where province attribute is "").
 
 
+2.               regrading tasks 4+5:
 
-1.
- A note regarding task 3:
-some countries, like the netherlands (that appeared in the assignment
-example), have multiple covid19 records per day.
-for instance,
-https://api.covid19api.com/country/Netherlands?from=2021-01-07T00%3A00%3A00&to
-=2021-01-08T00%3A00%3A00,
-will include a records for the netherlands mainland but also several records
-for each dutch territories.
-when considering active & confirmed cases of country per day, i chose to
-consider only the mainland data (where province attribute is "").
+A.  I chose to implement and handle the subscribers data in the following
+    manner: creating a .json file for each country, which will hold subscribers
+    info by date and by mail (which is unique):
+    e.g in israel's subscribers file, we can have:
+
+    {date_x: {email_x: [{route_a, route2_b, route_c], email_y: [{route_z}]}
+
+    when looking for potential infected subscribers by a confirmed case
+    in day x in italy, we go for italy subscribers file, then
+    "day x" key and so on.
+
+    * Assuming a single subscriber can attempt multiple routes per day and
+    transmit them separately, I chose to implement the value of a subscriber as an
+    array of routes per each subscriber(and therefore the [] in the above example).
 
 
-2.
-    regrading tasks 4+5:
-I chose to implement and handle the subscribers data in the following
-manner:
-
-creating a .json file for each country, which will hold subscribers info by
-date and by mail (which is unique):
-
-e.g in israel's subscribers file, we can have:
-{date_x: {email_x: [{route_a, route2_b, route_c], email_y: [{route_z}]}
-
-(if we look for potential infected subscribers by a confirmed case
-in day x in italy, we will look for only in the italy subscribers file, then
-according to day x key, etc).
-
-* Assuming a single subscriber can attempt multiple routes per day (and
-transmit them separately), I chose to implement the value of a subscriber as an
-array of routes per each subscriber(and therefore the [] in the above example).
+B.  Although I assume using files is a not a great idea and prone to race
+    condition issues, since i used a default single-threaded flask, which will
+     process one request at a time, it won't create writer race conditions
+     over subscribers' countries files.
 
 

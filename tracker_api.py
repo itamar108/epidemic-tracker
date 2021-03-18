@@ -5,7 +5,6 @@ from risk_analyzer import get_trip_risk
 from notificator import add_new_subscriber, poll_and_notify
 
 app = flask.Flask(__name__)
-# app.config["DEBUG"] = True
 
 
 @app.route('/', methods=['GET'])
