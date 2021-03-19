@@ -1,4 +1,31 @@
 
+                    FILES DESCRIPTION:
+
+1. tracker_api.py - holds the implementation of the our tracker's Rest
+                    API. contains our main function.
+
+2. risk_analyzer.py - holds the implementation of the risk analysis computation
+                      required for the 'infectionRisk' functionality in task3.
+
+3. notificator.py - holds the implementation of polling the server for new
+                    confirmed cases, checking against our subscriber and
+                    notifying them.
+
+  * Main is at tracker_api.py
+
+
+OTHER FILES:
+    1. CountriesData dir - contains covid19 stats for each
+    country (in a separate file). used as cache for task3.
+
+    2. Subscribers dir - contains subscribers data for each country in a separate
+    file. (task 4)
+
+    3. Notifications dir - will contains a single notification.json file
+    (for task 5)
+
+    4. notificator_test.py -  a small and simple test for the notificator.
+
 
 1.              A note regarding task 3:
 
@@ -31,10 +58,14 @@ A.  I chose to implement and handle the subscribers data in the following
     array of routes per each subscriber(and therefore the [] in the above example).
 
 
-B.  Although I assume using files is a not a great idea and prone to race
-    condition issues, i figured that since i use a default single-threaded
-    flask, which will process one request at a time, i won't create writer race
-    conditions over subscribers' countries files (and the poll_and_notify
-    process in only a reader).
+B.  Using files in disk to store subscribers' data is safer than holding all in
+    the notificator process memory, which indeed assures faster access but can
+    be exposed to risk if process or server are down.
+    Regrading subscribers' files race condition potential issues, I figured
+    that since I use a default single-threaded flask, which will process one
+    request at a time, I won't create any writers race conditions over
+    files, and the poll_and_notify process in fact a reader. And so race
+    hazarads should not occur.
 
-
+C.  In a situation where a subscriber has been infected several times, I
+    assumed he'd like to be notified for each interaction point.

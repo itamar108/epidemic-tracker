@@ -30,10 +30,19 @@ def api_subscribe():
 
 
 def start_api_server():
+    """
+    Activating our server
+    :return:
+    """
     app.run(debug=True, use_reloader=False)
 
-if __name__ == '__main__':
-    p1 = multiprocessing.Process(name="p1",target= poll_and_notify)
+
+def main():
+    p1 = multiprocessing.Process(name="p1", target=poll_and_notify)
     p2 = multiprocessing.Process(name="p2", target=start_api_server)
     p1.start()
     p2.start()
+
+
+if __name__ == '__main__':
+    main()

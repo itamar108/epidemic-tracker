@@ -2,8 +2,9 @@
 import time
 import requests
 import os
-import math
 import json
+from math import cos, asin, sqrt, pi
+
 
 SUBSCRIBERS_DATA_DIR_PATH = "Subscribers"
 
@@ -81,6 +82,21 @@ class Notificator:
         self.notification_data.append(new_line)
 
 
+    def get_distance_between_points(self, lat1, lon1,lat2, lon2):
+        """
+        Calculates ditance between two GCS points (lat1,lon1), (lat2,lon2).
+        :param lat1: latitude of first point
+        :param lon1: longitude of first point
+        :param lat2: latitude of second point
+        :param lon2: longitude of first point
+        :return: distance between points
+        """
+        p = pi / 180
+        a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(
+            lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+        return 12742 * asin(sqrt(a))
+
+
     def check_subscriber(self, subscriber_routes, point):
         """
         Checking subscriber's infection against given point in confirmed
@@ -92,7 +108,7 @@ class Notificator:
         """
         for route in subscriber_routes:
             for s_point in route["route"]:
-                distance = math.dist((s_point["lat"],s_point["lon"]), (point["lat"],point["lon"]))
+                distance = self.get_distance_between_points(s_point["lat"],s_point["lon"], point["lat"],point["lon"])
                 if distance <= 2:
                     self.notify(route,s_point)
                     return
@@ -148,6 +164,22 @@ class Notificator:
             json.dump(self.notification_data, notification_file)
 
 
+    def check_infection_from_given_data(self, data):
+        """
+        checking subcribers against a given data, not from server (used for
+        testing purposes in notificator_test.py)
+        :param data:
+        :return:
+        """
+        with open(self.notifications_path, "r") as notification_file:
+            self.notification_data = json.load(notification_file)
+
+        for route in data:
+            self.check_confirmed_route(route)
+        with open(self.notifications_path, "w") as notification_file:
+            json.dump(self.notification_data, notification_file)
+
+
 def poll_and_notify():
     """
     This function runs consistently, polling server and notifies infected
@@ -157,7 +189,6 @@ def poll_and_notify():
     n = Notificator()
     while True:
         start_time = time.time()
-        print(start_time)
         n.fetch_and_check_infection()
         time.sleep(120 - ((time.time()- start_time)%120))
         # sleep 120 seconds total (including execution of command before)
