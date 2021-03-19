@@ -32,8 +32,7 @@ OTHER FILES:
     some countries, like the netherlands (that appeared in the assignment
     example), have multiple covid19 records per day.
     for instance,
-    https://api.covid19api.com/country/Netherlands?from=2021-01-07T00%3A00%3A00&to
-    =2021-01-08T00%3A00%3A00,
+    https://api.covid19api.com/country/Netherlands?from=2021-01-07T00%3A00%3A00&to=2021-01-08T00%3A00%3A00,
     will include a records for the netherlands mainland but also several records
     for each dutch territories.
     when considering active & confirmed cases of country per day, i chose to
