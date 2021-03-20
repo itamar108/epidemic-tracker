@@ -1,4 +1,6 @@
 
+
+
 ########################################################################
                     FILES DESCRIPTION:
 ########################################################################
@@ -17,6 +19,8 @@
   *(as part of creating the docker image, I Also created a script that runs
     the dds server, waits 10 seconds and runs the app in parallel. called start
     .sh.)
+
+    *** DOCKER IMAGE AT: https://hub.docker.com/r/itamar108/epidemic_tracker_app_image
 
 ##########################################################################
                         OTHER FILES:
