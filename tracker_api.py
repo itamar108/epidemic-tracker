@@ -34,7 +34,7 @@ def start_api_server():
     Activating our server
     :return:
     """
-    app.run(debug=True, use_reloader=False)
+    app.run(host= "0.0.0.0", port=5001, debug=True, use_reloader=False)
 
 
 def main():

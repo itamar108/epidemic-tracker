@@ -24,8 +24,9 @@ OTHER FILES:
     3. Notifications dir - will contains a single notification.json file
     (for task 5)
 
-    4. notificator_test.py -  a small and simple test for the notificator.
+    4. Tests/notificator_test.py - small and simple test for the notificator.
 
+    5. covid_server - contains the extracted dds tar dir.
 
 1.              A note regarding task 3:
 
