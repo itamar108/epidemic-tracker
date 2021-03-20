@@ -1,6 +1,7 @@
 
+########################################################################
                     FILES DESCRIPTION:
-
+########################################################################
 1. tracker_api.py - holds the implementation of the our tracker's Rest
                     API. contains our main function.
 
@@ -11,25 +12,31 @@
                     confirmed cases, checking against our subscriber and
                     notifying them.
 
-  * Main is at tracker_api.py
+  * Main is at tracker_api.py, and assumes dds server is on.
 
+  *(as part of creating the docker image, I Also created a script that runs
+    the dds server, waits 10 seconds and runs the app in parallel. called start
+    .sh.)
 
-OTHER FILES:
-    1. CountriesData dir - contains covid19 stats for each
-    country (in a separate file). used as cache for task3.
+##########################################################################
+                        OTHER FILES:
+##########################################################################
+1. CountriesData dir - contains covid19 stats for each country (in a separate
+    file). used as cache for task3.
 
-    2. Subscribers dir - contains subscribers data for each country in a separate
+2. Subscribers dir - contains subscribers data for each country in separate
     file. (task 4)
 
-    3. Notifications dir - will contains a single notification.json file
-    (for task 5)
+3. Notifications dir - will contains a single notification.json file (task 5)
 
-    4. Tests/notificator_test.py - small and simple test for the notificator.
+4. Tests/notificator_test.py - small and simple test for the notificator.
 
-    5. covid_server - contains the extracted dds tar dir.
+5. covid_server - contains the extracted dds tar dir.
 
+
+##########################################################################
 1.              A note regarding task 3:
-
+##########################################################################
     some countries, like the netherlands (that appeared in the assignment
     example), have multiple covid19 records per day.
     for instance,
@@ -39,9 +46,9 @@ OTHER FILES:
     when considering active & confirmed cases of country per day, i chose to
     consider only the mainland data (where province attribute is "").
 
-
+##########################################################################
 2.               regrading tasks 4+5:
-
+##########################################################################
 A.  I chose to implement and handle the subscribers data in the following
     manner: creating a .json file for each country, which will hold subscribers
     info by date and by mail (which is unique):
@@ -64,7 +71,9 @@ B.  Using files in disk to store subscribers' data is safer than holding all in
     Regrading subscribers' files race condition potential issues, I figured
     that since I use a default single-threaded flask, which will process one
     request at a time, I won't create any writers race conditions over
-    files, and the poll_and_notify process in fact a reader. And so race
+    files, and the poll_and_notify thread is in fact a reader (and thus even if
+    he reads an outdated subscribers information, he'll get the updated
+    info in the next poll). And so in my humble opinion race
     hazarads should not occur.
 
 C.  In a situation where a subscriber has been infected several times, I

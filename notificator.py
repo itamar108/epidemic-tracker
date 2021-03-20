@@ -186,6 +186,7 @@ def poll_and_notify():
     :return: None
     """
     n = Notificator()
+
     while True:
         start_time = time.time()
         n.fetch_and_check_infection()

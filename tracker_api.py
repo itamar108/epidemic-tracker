@@ -1,5 +1,5 @@
 import flask
-import multiprocessing
+import threading
 from flask import jsonify
 from risk_analyzer import get_trip_risk
 from notificator import add_new_subscriber, poll_and_notify
@@ -38,10 +38,11 @@ def start_api_server():
 
 
 def main():
-    p1 = multiprocessing.Process(name="p1", target=poll_and_notify)
-    p2 = multiprocessing.Process(name="p2", target=start_api_server)
+    p1 = threading.Thread(target=poll_and_notify)
+    p2 = threading.Thread(target=start_api_server)
     p1.start()
     p2.start()
+
 
 
 if __name__ == '__main__':
