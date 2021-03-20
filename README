@@ -18,7 +18,7 @@
   * main is at tracker_api.py, and assumes dds server is on.
 
   * as part of creating the docker image, I created a script that also runs
-    the dds server, waits 10s and runs the app in parallel. called 'start.sh')
+    the dds server, waits 10s and runs the app in parallel. called 'start.sh'.
 
   * app host&port at 0.0.0.0:5001.
 
