@@ -14,13 +14,15 @@
                     confirmed cases, checking against our subscriber and
                     notifying them.
 
-  * Main is at tracker_api.py, and assumes dds server is on.
 
-  *(as part of creating the docker image, I Also created a script that runs
-    the dds server, waits 10 seconds and runs the app in parallel. called start
-    .sh.)
+  * main is at tracker_api.py, and assumes dds server is on.
 
-    *** DOCKER IMAGE AT: https://hub.docker.com/r/itamar108/epidemic_tracker_app_image
+  * as part of creating the docker image, I created a script that also runs
+    the dds server, waits 10s and runs the app in parallel. called 'start.sh')
+
+  * app host&port at 0.0.0.0:5001.
+
+*** DOCKER IMAGE AT: https://hub.docker.com/r/itamar108/epidemic_tracker_app_image
 
 ##########################################################################
                         OTHER FILES:
